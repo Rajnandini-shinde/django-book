@@ -3,6 +3,8 @@ from .models import Movie,Theater,Seat,Booking
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from movies.models import Movie
+from django.http import HttpResponse
+import PIL
 def home(request):
     movies=Movie.objects.all()
     #return HttpResponse('Welcome to BookMySeat!')
@@ -53,4 +55,9 @@ def book_Seats(request,theater_id):
 
         
     return render(request,'movies/seat_selection.html',{'theaters':theaters,'seats':seats})
+
+
+
+def test_pillow(request):
+    return HttpResponse("Pillow Version: " + PIL.__version__)
 
