@@ -176,7 +176,7 @@
         <a href="{% url 'theater_list' movie.id %}" class="text-decoration-none">
           <div class="card h-100">
             <img
-              src="{{ movie.image.url }}"
+              src="<img src="https://picsum.photos/400/600?random={{ movie.id }}"
               class="card-img-top"
               alt="{{ movie.name }}"
               height="300"
