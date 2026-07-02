@@ -6,23 +6,51 @@
 
     <div class="row justify-content-center mb-5">
         <div class="col-md-8">
-            <form method="GET" action="{% url 'movie_list' %}" class="search-bar">
-                <div class="input-group">
-                    <input
-                        class="form-control form-control-lg"
-                        name="search"
-                        placeholder="Search for Movies, Events, Plays, Sports and Activities"
-                        type="text"
-                        value="{{ request.GET.search|default_if_none:'' }}"
-                        aria-label="Search for movies"
-                    />
-                    <div class="input-group-append">
-                        <button class="btn btn-primary" type="submit">
-                            <i class="fas fa-search"></i> Search
-                        </button>
-                    </div>
-                </div>
-            </form>
+            <form method="GET" action="{% url 'movie_list' %}" class="mb-4">
+
+    <input class="form-control mb-2"
+           type="text"
+           name="search"
+           placeholder="Search Movie"
+           value="{{ request.GET.search }}">
+
+    <h5>Genre</h5>
+
+{% for g in genre_counts %}
+<label>
+    <input type="checkbox"
+           name="genre"
+           value="{{ g.genre }}">
+    {{ g.genre }} ({{ g.total }})
+</label><br>
+{% endfor %}
+
+    <br><br>
+
+    <h5>Language</h5>
+
+{% for l in language_counts %}
+<label>
+    <input type="checkbox"
+           name="language"
+           value="{{ l.language }}">
+    {{ l.language }} ({{ l.total }})
+</label><br>
+{% endfor %}
+
+    <br><br>
+
+    <select name="sort" class="form-control mb-2">
+        <option value="">Sort By</option>
+        <option value="rating">Rating</option>
+        <option value="name">Name</option>
+    </select>
+
+    <button class="btn btn-primary">
+        Filter
+    </button>
+
+</form>
         </div>
     </div>
 
@@ -30,7 +58,11 @@
         {% for movie in movies %}
         <div class="col-md-4 mb-4">
             <div class="card h-100 shadow-sm">
-                <img src=<img src="https://picsum.photos/400/600" class="card-img-top" alt="{{ movie.name }}" style="height: 300px; object-fit: cover;">>
+                <img
+                    src="https://picsum.photos/400/600?random={{ movie.id }}"
+                    class="card-img-top"
+                    alt="{{ movie.name }}"
+                    style="height:300px;object-fit:cover;">
                 <div class="card-body">
                     <h5 class="card-title">{{ movie.name }}Test</h5>
                     <p class="card-text">
@@ -54,6 +86,27 @@
             <p class="lead">No movies found. Try a different search term.</p>
         </div>
         {% endfor %}
+        <div class="text-center mt-4">
+
+            {% if movies.has_previous %}
+                <a class="btn btn-secondary"
+                    href="?page={{ movies.previous_page_number }}">
+                    Previous
+                </a>
+    {% endif %}
+
+    <span class="mx-3">
+        Page {{ movies.number }} of {{ movies.paginator.num_pages }}
+    </span>
+
+    {% if movies.has_next %}
+        <a class="btn btn-secondary"
+           href="?page={{ movies.next_page_number }}">
+            Next
+        </a>
+    {% endif %}
+
+</div>
     </div>
 </div>
 
@@ -83,18 +136,7 @@
             function() { $(this).removeClass('shadow'); }
         );
 
-        // Implement client-side filtering
-        $('input[name="search"]').on('input', function() {
-            var searchTerm = $(this).val().toLowerCase();
-            $('#movieList .col-md-4').each(function() {
-                var movieTitle = $(this).find('.card-title').text().toLowerCase();
-                if (movieTitle.includes(searchTerm)) {
-                    $(this).show();
-                } else {
-                    $(this).hide();
-                }
-            });
-        });
+       
     });
 </script>
 

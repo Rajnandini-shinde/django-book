@@ -3,7 +3,28 @@ from .models import Movie,Theater,Seat,Booking
 
 @admin.register(Movie)
 class MovieAdmin(admin.ModelAdmin):
-    list_display=['name','rating','cast','description']
+    
+    list_display = [
+        'name',
+        'genre',
+        'language',
+        'rating',
+        'cast'
+    ]
+
+    list_filter = [
+        'genre',
+        'language'
+    ]
+
+    search_fields = [
+        'name',
+        'cast'
+    ]
+
+    ordering = [
+        '-rating'
+    ]
 
 @admin.register(Theater)
 class TheaterAdmin(admin.ModelAdmin):

@@ -6,8 +6,18 @@ class Movie(models.Model):
     name=models.CharField(max_length=255)
     image=models.ImageField(upload_to="movies/")
     rating= models.DecimalField(max_digits=3,decimal_places=1)
+    # New fields
+    genre = models.CharField(max_length=100, db_index=True)
+    language = models.CharField(max_length=100,db_index=True)
+
     cast=models.TextField()
     description=models.TextField(blank=True,null=True)#optional
+    class Meta:
+        indexes = [
+            models.Index(fields=['genre']),
+            models.Index(fields=['language']),
+            models.Index(fields=['rating']),
+        ]
 
     def __str__(self):
         return self.name
